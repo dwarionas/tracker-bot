@@ -5,11 +5,13 @@ export type SessionContext = Context & SessionFlavor<SessionData>;
 type ConversationsContext = ConversationFlavor<Context>
 export type MyContext = SessionContext & ConversationsContext;
 
-type FrequentlyUsedProducts = Record<string, number>;
-export type States = "initial" | "addMeal" | "stats" | "sync";
+export type FrequentlyUsedProducts = Record<string, { type: 'stuck' | 'gram', value: number }>;
+export type States = "INIT" | "ADD_PROTEIN" | "FROM_SAVED" | "ADD_PRODUCT" | "STATS" | "SYNC";
 
 export interface SessionData {
     frequentlyUsedProducts: FrequentlyUsedProducts,
     proteinToday: number;
     states: States[];
+    messages: number[];
+    isKeyboardVisible: boolean;
 }

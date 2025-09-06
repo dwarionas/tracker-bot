@@ -1,0 +1,20 @@
+import type { Conversation } from "@grammyjs/conversations";
+import { type Context } from "grammy";
+import type { MyContext, SessionContext } from "../types/types.js";
+import { backKeyboard } from "../keyboards/index.js";
+
+export async function addProtein(conversation: Conversation, ctx: Context) {
+    const session = await conversation.external((ctx: SessionContext) => ctx.session);
+
+    await ctx.reply('Введіть кількість протеїну:', { reply_markup: backKeyboard });
+    const { match } = await conversation.waitForHears(/^\d+$/, {
+        otherwise: ctx => ctx.reply('Number expected')
+    });
+
+      await conversation.external((ctx: SessionContext) => {
+        ctx.session.proteinToday += +match;
+    });
+
+    await ctx.reply(`Прийнято: ${match} г білка ✅`);
+    await conversation.halt();
+}

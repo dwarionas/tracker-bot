@@ -1,17 +1,16 @@
-import { Bot, Keyboard } from "grammy";
+import { Bot } from "grammy";
 import type { MyContext } from "../types/types.js";
-import { navigate } from "../service/navigation.js";
-
-export const initialKeyboard = new Keyboard()
-    .text('Додати прийом їжі').row()
-    .text("Статистика").row()
-	.text("Синхронізація")
-	.persistent()
-	.resized()
+import { initialKeyboard } from "../keyboards/index.js";
 
 export function startCommand(bot: Bot<MyContext>) {
-    bot.command('start', navigate('initial'), async (ctx) => {
-        await ctx.reply('Вітаю в боті', { reply_markup: initialKeyboard });
+    bot.command('start', async (ctx) => {
+        ctx.session.states = ['INIT'];
+
+        //const isKeyboardVisible = ctx.session.isKeyboardVisible;
+
+        await ctx.reply('Вітаю в боті', { 
+            reply_markup: initialKeyboard
+        });
     });
 
     bot.hears('Статистика', async ctx => {

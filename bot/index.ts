@@ -2,39 +2,42 @@ import bot from "./bot.js";
 import { session } from "grammy";
 import { conversations, createConversation } from "@grammyjs/conversations";
 
+import { log } from "./middlewares/cleaner.js";
 import { startCommand } from "./commands/start.js";
-import { crudMenu, crudHandler } from "./handlers/addMeal/index.js";
+import { crudHandler } from "./handlers/crud.js";
 
 import type { SessionData, MyContext } from "./types/types.js";
 import defaultProducts from "./default_products.json" with { type: "json" };
-import { addMeal } from "./conversations/addMeal/addMeal.js";
+import { addProtein } from "./conversations/addProtein.js";
+import { addProduct, fromSaved } from "./conversations/fromSaved.js";
 
 // middlewares
 bot.use(
 	session<SessionData, MyContext>({
 		initial: () => ({ 
 			proteinToday: 0,
-			frequentlyUsedProducts: defaultProducts,
-			states: ['initial']
+			frequentlyUsedProducts: {},
+			states: [],
+			messages: [],
+			isKeyboardVisible: true
 		}),
 	}),
 );
+bot.use((ctx, next) => {
+	console.log(ctx.session.states);
+	next();
+})
+// bot.use(log())
 bot.use(conversations());
-bot.use(createConversation(addMeal));
-bot.use(crudMenu);
+bot.use(createConversation(addProtein));
+bot.use(createConversation(addProduct));
 
 // handlers
 crudHandler(bot);
+fromSaved(bot);
 
 // commands
 startCommand(bot);
 
 bot.catch((err) => console.error(err));
 bot.start()
-
-
-	// await ctx.reply(`Список продуктів: 
-	// 	${Object.entries(ctx.session.frequentlyUsedProducts).map(item => {
-	// 	    return item[0]+': '+item[1]+'\n'
-	// 	})} 
-	// `);
