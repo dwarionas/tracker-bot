@@ -1,5 +1,5 @@
 import type { ConversationFlavor } from "@grammyjs/conversations";
-import type { Context, SessionFlavor } from "grammy";
+import type { Context, Keyboard, SessionFlavor } from "grammy";
 
 export type SessionContext = Context & SessionFlavor<SessionData>;
 type ConversationsContext = ConversationFlavor<Context>
@@ -13,5 +13,4 @@ export interface SessionData {
     proteinToday: number;
     states: States[];
     messages: number[];
-    isKeyboardVisible: boolean;
 }

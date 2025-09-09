@@ -19,7 +19,6 @@ bot.use(
 			frequentlyUsedProducts: {},
 			states: [],
 			messages: [],
-			isKeyboardVisible: true
 		}),
 	}),
 );

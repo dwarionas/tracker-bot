@@ -1,16 +1,11 @@
-import { Bot } from "grammy";
+import { Bot, Keyboard } from "grammy";
 import type { MyContext } from "../types/types.js";
-import { initialKeyboard } from "../keyboards/index.js";
+import { staticKeyboards } from "../keyboards/index.js";
 
 export function startCommand(bot: Bot<MyContext>) {
     bot.command('start', async (ctx) => {
         ctx.session.states = ['INIT'];
-
-        //const isKeyboardVisible = ctx.session.isKeyboardVisible;
-
-        await ctx.reply('Вітаю в боті', { 
-            reply_markup: initialKeyboard
-        });
+        await ctx.reply('Вітаю в боті', { reply_markup: staticKeyboards.INIT as Keyboard });
     });
 
     bot.hears('Статистика', async ctx => {

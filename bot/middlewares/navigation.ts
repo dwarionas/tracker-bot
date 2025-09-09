@@ -1,8 +1,6 @@
 import type { NextFunction } from "grammy";
 import type { MyContext, States } from "../types/types.js";
 
-type BackParams = { toBegin?: boolean };
-
 export function navigate<T extends MyContext>(to: States) {
     return async (ctx: T, next: NextFunction) => {
         const states = ctx.session.states;
@@ -23,17 +21,12 @@ export function navigate<T extends MyContext>(to: States) {
     };
 }
 
-export function back<T extends MyContext>(params?: BackParams) {
+export function back<T extends MyContext>() {
     return async (ctx: T, next: NextFunction) => {
         const states = ctx.session.states;
         if (!states) ctx.session.states = ['INIT'];
 
-        if (params?.toBegin) {
-            ctx.session.states = ['INIT'];
-        } else {
-            states.pop();
-        }
-
+        states.pop();
         await next();
     };
 }
