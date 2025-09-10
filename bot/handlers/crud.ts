@@ -18,6 +18,6 @@ export function crudHandler(bot: Bot<MyContext>) {
     });
 
     bot.hears('Назад', onlyState(["ADD_PROTEIN", "FROM_SAVED", "ADD_PRODUCT"]), back(), async (ctx) => {
-        await ctx.reply('Ви в головному меню', {reply_markup: getKeyboard(ctx.session)});
+        await ctx.reply('Ви в головному меню', { reply_markup: getKeyboard(ctx.session) });
     });
 }

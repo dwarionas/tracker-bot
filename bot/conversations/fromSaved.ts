@@ -16,12 +16,17 @@ export async function addProduct(conversation: Conversation, ctx: Context) {
 
     await ctx.reply('Введіть назву продукту або страви:', { reply_markup: getKeyboard(session) });
     const { message: name } = await conversation.waitFor('message:text');
+    if (name.text == 'Назад') {
+        await conversation.external((ctx: SessionContext) => ctx.session.states.pop());
+        const sess = await conversation.external((ctx: SessionContext) => ctx.session);
+        return await ctx.reply('Виберіть опцію', { reply_markup: getKeyboard(sess) });
+    }
 
     await ctx.reply('Виберіть тип продукту', { reply_markup: keyboards.productTypes });
     const { match: type } = await conversation.waitForHears(['Поштучно', 'В грамах'], {
         otherwise: (ctx) => ctx.reply('Виберіть один з наведених варіантів')
     });
-
+// ДОПРАЦЮВАТИ ЦЕЙ ФАЙЛ
     await ctx.reply('Введіть кількість білку на ', { reply_markup: getKeyboard(session) });
     const { match: count } = await conversation.waitForHears(/^\d+$/, {
         otherwise: ctx => ctx.reply('Number expected')

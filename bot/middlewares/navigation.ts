@@ -1,5 +1,7 @@
 import type { NextFunction } from "grammy";
-import type { MyContext, States } from "../types/types.js";
+import type { MyContext, SessionData, States } from "../types/types.js";
+import onlyState from "./onlyState.js";
+import { getKeyboard } from "../keyboards/index.js";
 
 export function navigate<T extends MyContext>(to: States) {
     return async (ctx: T, next: NextFunction) => {

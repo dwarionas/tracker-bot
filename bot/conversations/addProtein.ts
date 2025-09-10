@@ -8,7 +8,15 @@ export async function addProtein(conversation: Conversation, ctx: Context) {
 
     await ctx.reply('Введіть кількість протеїну:', { reply_markup: getKeyboard(session) });
     const { match } = await conversation.waitForHears(/^\d+$/, {
-        otherwise: ctx => ctx.reply('Number expected')
+        otherwise: async ctx => {
+            if (ctx.message?.text == 'Назад') {
+                await conversation.external((ctx: SessionContext) => ctx.session.states.pop());
+                const sess = await conversation.external((ctx: SessionContext) => ctx.session);
+                return await ctx.reply('Ви в головному меню', { reply_markup: getKeyboard(sess) });
+            } else {
+                ctx.reply('Number expected')
+            }
+        }
     });
 
     await conversation.external((ctx: SessionContext) => {
