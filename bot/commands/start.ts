@@ -5,7 +5,7 @@ import regUser from "../api/reg.js";
 
 export function startCommand(bot: Bot<MyContext>) {
     bot.command('start', async (ctx) => {
-        regUser(ctx.from!)
+        // regUser(ctx.from!)
         ctx.session.states = ['INIT'];
         await ctx.reply('Вітаю в боті', { reply_markup: staticKeyboards.INIT as Keyboard });
     });
