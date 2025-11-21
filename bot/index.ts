@@ -7,7 +7,6 @@ import { startCommand } from "./commands/start.js";
 import { crudHandler } from "./handlers/crud.js";
 
 import type { SessionData, MyContext } from "./types/types.js";
-import defaultProducts from "./default_products.json" with { type: "json" };
 import { addProtein } from "./conversations/addProtein.js";
 import { addProduct, fromSaved } from "./conversations/fromSaved.js";
 
@@ -16,9 +15,12 @@ bot.use(
 	session<SessionData, MyContext>({
 		initial: () => ({ 
 			proteinToday: 0,
-			frequentlyUsedProducts: {},
+			products: [],
 			states: [],
 			messages: [],
+			navOptions: {
+				msg: ''
+			}
 		}),
 	}),
 );
