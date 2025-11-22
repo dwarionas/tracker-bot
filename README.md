@@ -84,7 +84,7 @@ Users can quickly log protein, manage a list of saved foods, and pick from popul
 ### Installation
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/dwarionas/tracker-bot
 cd bot
 npm install
 ```
