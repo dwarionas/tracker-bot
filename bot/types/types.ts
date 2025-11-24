@@ -11,17 +11,17 @@ export type Product = {
   value: number;
 };
 
-export type States = "INIT" | "ADD_PROTEIN" | "FROM_SAVED" | "ADD_PRODUCT" | "CHOOSE_PRODUCT" | "STATS" | "SYNC";
-
-interface NavOptions {
-    msg: string;
-    
-}
+export type States = "INIT" | 
+              "ADD_PROTEIN" | 
+              "FROM_SAVED" | 
+              "ADD_PRODUCT" | 
+          "CHOOSE_PRODUCT" | 
+                    "STATS" | 
+                    "SYNC";
 
 export interface SessionData {
     products: Product[],
     proteinToday: number;
     states: States[];
     messages: number[];
-    navOptions: NavOptions;
 }

@@ -1,47 +1,55 @@
 import type { Conversation } from "@grammyjs/conversations";
 import { Bot, type Context } from "grammy";
 import type { Product, MyContext, SessionContext } from "../types/types.js";
-import onlyState from "../middlewares/onlyState.js";
+import onlyState, { onlyStateSoft } from "../middlewares/onlyState.js";
 import { exitConv, navigate } from "../middlewares/navigation.js";
-import { keyboards, getKeyboard } from "../keyboards/index.js";
-import renderPage from "../middlewares/pagination.js";
+import { keyboards, getKeyboard } from "../helpers/keyboards.js";
+import renderKeyboard from "../middlewares/pagination.js";
 import default_products from "../default_products.js";
 
 export function fromSaved(bot: Bot<MyContext>) {
     bot.hears('Додати продукт або страву', onlyState(['FROM_SAVED']), navigate('ADD_PRODUCT'), async ctx => {
+        await ctx.reply('Введіть назву продукту або страви:', { reply_markup: getKeyboard(ctx.session) });
         await ctx.conversation.enter("addProduct");
     });
 
     bot.hears('Вибрати з популярного', onlyState(['FROM_SAVED']), navigate('CHOOSE_PRODUCT'), async ctx => {
-        await ctx.reply('Натисність на продукт щоб додати до списку збережених', { reply_markup: renderPage(0, default_products) });
+        await ctx.reply('text', { reply_markup: getKeyboard(ctx.session) });
+        await ctx.reply('Натисність на продукт щоб додати до списку збережених', { reply_markup: renderKeyboard(0, default_products) });
     });
 
-    bot.on("callback_query:data", async (ctx) => {
+    bot.on("callback_query:data", onlyStateSoft(['CHOOSE_PRODUCT'], async (ctx) => {
         const data = ctx.callbackQuery.data;
 
         if (data.startsWith("page:")) {
             const page = parseInt(String(data.split(":")[1]), 10);
             await ctx.editMessageReplyMarkup({
-                reply_markup: renderPage(page, default_products),
+                reply_markup: renderKeyboard(page, default_products),
             });
         } else { 
-            const product = default_products.filter(el => el.name = data)[0];
+            const product = default_products.filter(el => el.name == data)[0];
 
-            if (product && !ctx.session.products.filter(el => el.name == product.name).length) {
+            if (product && !ctx.session.products.filter((el: { name: string; }) => el.name == product.name).length) {
                 ctx.session.products.push(product);
+                await ctx.answerCallbackQuery('Додано');
+            } else {
+                await ctx.answerCallbackQuery('Продукт вже доданий');
             }
-            
-            await ctx.reply('Додано до збережених: ' + data);
         }
+    }));
 
-        await ctx.answerCallbackQuery();
-    });
+    bot.on("callback_query:data", onlyStateSoft(['FROM_SAVED'], async (ctx) => {
+        const data = ctx.callbackQuery.data;
+
+        console.log('data')
+    }));
 }
+
+    
 
 export async function addProduct(conversation: Conversation, ctx: Context) {
     const session = await conversation.external((ctx: MyContext) => ctx.session);
 
-    await ctx.reply('Введіть назву продукту або страви:', { reply_markup: getKeyboard(session) });
     const { message: name } = await conversation.waitFor('message:text');
     if (name.text == 'Назад') {
         await conversation.external((ctx: SessionContext) => ctx.session.states.pop());

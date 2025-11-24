@@ -16,11 +16,8 @@ bot.use(
 		initial: () => ({ 
 			proteinToday: 0,
 			products: [],
-			states: [],
+			states: ['INIT'],
 			messages: [],
-			navOptions: {
-				msg: ''
-			}
 		}),
 	}),
 );

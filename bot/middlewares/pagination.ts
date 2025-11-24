@@ -3,7 +3,7 @@ import type { Product } from "../types/types.js";
 
 const step = 5;
 
-export default function renderPage(page: number, products: Product[]) {
+export default function renderKeyboard(page: number, products: Product[]) {
     const start = page * step;
     const end = start + step;
     const visible = products.slice(start, end);

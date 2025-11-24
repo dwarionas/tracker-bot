@@ -1,6 +1,6 @@
 import { Bot, Keyboard } from "grammy";
 import type { MyContext } from "../types/types.js";
-import { staticKeyboards } from "../keyboards/index.js";
+import { staticKeyboards } from "../helpers/keyboards.js";
 import regUser from "../api/reg.js";
 
 export function startCommand(bot: Bot<MyContext>) {
