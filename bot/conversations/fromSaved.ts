@@ -6,17 +6,12 @@ import { exitConv, navigate } from "../middlewares/navigation.js";
 import { keyboards, getKeyboard } from "../helpers/keyboards.js";
 import renderKeyboard from "../middlewares/pagination.js";
 import default_products from "../default_products.js";
+import { handle } from "../middlewares/handler.js";
 
 export function fromSaved(bot: Bot<MyContext>) {
-    bot.hears('Додати продукт або страву', onlyState(['FROM_SAVED']), navigate('ADD_PRODUCT'), async ctx => {
-        await ctx.reply('Введіть назву продукту або страви:', { reply_markup: getKeyboard(ctx.session) });
-        await ctx.conversation.enter("addProduct");
-    });
+    bot.hears('Додати продукт або страву', onlyState(['FROM_SAVED']), navigate('ADD_PRODUCT'), handle());
 
-    bot.hears('Вибрати з популярного', onlyState(['FROM_SAVED']), navigate('CHOOSE_PRODUCT'), async ctx => {
-        await ctx.reply('text', { reply_markup: getKeyboard(ctx.session) });
-        await ctx.reply('Натисність на продукт щоб додати до списку збережених', { reply_markup: renderKeyboard(0, default_products) });
-    });
+    bot.hears('Вибрати з популярного', onlyState(['FROM_SAVED']), navigate('CHOOSE_PRODUCT'), handle());
 
     bot.on("callback_query:data", onlyStateSoft(['CHOOSE_PRODUCT'], async (ctx) => {
         const data = ctx.callbackQuery.data;

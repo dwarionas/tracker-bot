@@ -2,7 +2,7 @@ import type { NextFunction } from "grammy";
 import type { MyContext, SessionContext, SessionData, States } from "../types/types.js";
 import type { Conversation } from "@grammyjs/conversations";
 import { getKeyboard } from "../helpers/keyboards.js";
-import { getMessage } from "../helpers/messages.js";
+import { messages } from "../helpers/messages.js";
 
 export function navigate<T extends MyContext>(to: States) {
     return async (ctx: T, next: NextFunction) => {
@@ -45,7 +45,7 @@ export function exitConv<T extends MyContext>(conversation: Conversation) {
     if (text === 'Назад' || text === '/start') {
       const sess = await conversation.external((ctx: SessionContext) => applyBack(ctx.session));
 
-      await ctx.reply(getMessage(sess), { reply_markup: getKeyboard(sess) });
+      await ctx.reply(messages[sess.states.at(-1)!], { reply_markup: getKeyboard(sess) });
       await conversation.halt();
       return;
     }

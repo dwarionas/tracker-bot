@@ -27,7 +27,7 @@ export async function addProtein(conversation: Conversation, ctx: Context) {
     } });   
 
     await conversation.external((ctx: SessionContext) => {
-        ctx.session.proteinToday += +match;
+        ctx.session.proteinToday += +match; 
     });
 
     // коментар до їжі
