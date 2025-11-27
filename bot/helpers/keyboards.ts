@@ -15,7 +15,7 @@ export const keyboards: Record<Fields, Keyboard> = {
 export const staticKeyboards: Record<States, Keyboard | ((data: SessionData) => Keyboard | InlineKeyboard)> = {
   INIT: new Keyboard()
     .text('Додати білок').row()
-	.text('Налаштування')
+	  .text('Налаштування')
     .persistent()
     .resized(),
 

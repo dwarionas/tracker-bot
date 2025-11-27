@@ -23,5 +23,5 @@ export interface SessionData {
     products: Product[],
     proteinToday: number;
     states: States[];
-    messages: number[];
+    log: number[];
 }

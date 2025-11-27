@@ -2,7 +2,7 @@ import type { NextFunction } from "grammy";
 import type { MyContext, SessionContext, SessionData, States } from "../types/types.js";
 import type { Conversation } from "@grammyjs/conversations";
 import { getKeyboard } from "../helpers/keyboards.js";
-import { messages } from "../helpers/messages.js";
+import { messages } from "../helpers/handlers.js";
 
 export function navigate<T extends MyContext>(to: States) {
     return async (ctx: T, next: NextFunction) => {
