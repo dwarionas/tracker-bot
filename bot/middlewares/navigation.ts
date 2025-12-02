@@ -10,7 +10,7 @@ export function navigate<T extends MyContext>(to: States) {
         if (!states) ctx.session.states = ['INIT'];
 
         if (states.includes(to)) {
-            return ctx.reply('Action forbidden')
+            return ctx.reply('Action forbidden');
         }
 
         const currentState = states.at(-1)!;
@@ -34,6 +34,7 @@ function applyBack(session: SessionData): SessionData {
 export function back<T extends MyContext>() {
     return async (ctx: T, next: NextFunction) => {
         applyBack(ctx.session);
+        // ctx.deleteMessage();
         await next();
     };
 }

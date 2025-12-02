@@ -10,7 +10,9 @@ export default function renderKeyboard(page: number, products: Product[]) {
 
     const kb = new InlineKeyboard();
     for (const { name, value } of visible) {
-        kb.text(`${name}, ${value} білку`, name).row();
+        kb
+            .text(`${name}, ${value} білку`, name)
+            .row();
     }
 
     if (page > 0) kb.text("⬅️", `page:${page - 1}`);

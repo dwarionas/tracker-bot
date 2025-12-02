@@ -12,29 +12,27 @@ export const keyboards: Record<Fields, Keyboard> = {
         .resized()
 }
 
-export const staticKeyboards: Record<States, Keyboard | ((data: SessionData) => Keyboard | InlineKeyboard)> = {
+export const staticKeyboards: Record<States, Keyboard> = {
   INIT: new Keyboard()
     .text('Додати білок').row()
 	  .text('Налаштування')
     .persistent()
     .resized(),
 
-  FROM_SAVED: (data) => {
-    const hasProducts = data.products.length > 0;
-
-    if (hasProducts) return renderKeyboard(0, data.products);
-
-    return new Keyboard()
+  FROM_SAVED: new Keyboard()
       .text('Додати продукт або страву').row()
       .text('Вибрати з популярного').row()
       .text('Назад')
       .persistent()
-      .resized()
-  },
+      .resized(),
 
   ADD_PROTEIN: new Keyboard()
   	.text("Вибрати зі збережених").row()
   	.text('Назад').persistent().resized(),
+
+  ADD_FROM_SAVED: new Keyboard()
+    .text('Видалити зі збережених').row()
+    .text('Назад').persistent().resized(),
 
   ADD_PRODUCT: new Keyboard().text('Назад').persistent().resized(),
   CHOOSE_PRODUCT: new Keyboard().text('Назад').persistent().resized(),
@@ -45,5 +43,5 @@ export const staticKeyboards: Record<States, Keyboard | ((data: SessionData) => 
 
 export function getKeyboard(data: SessionData) {
   const kb = staticKeyboards[data.states.at(-1)!];
-  return typeof kb === "function" ? kb(data) : kb;
+  return kb;
 }

@@ -27,6 +27,7 @@ export default async function addProduct(conversation: Conversation, ctx: Contex
             name: name.text,
             type: type === 'Поштучно' ? 'stuck' : 'gram',
             value: +count,
+            amountToday: 0
         });
     });
 
