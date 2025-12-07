@@ -16,7 +16,8 @@ if (!BOT_KEY) {
 
 async function setWebhook() {
   try {
-    const url = `${WEBHOOK_URL}/api`;
+    const baseUrl = WEBHOOK_URL.replace(/\/$/, '');
+    const url = `${baseUrl}/api`;
     console.log(`Встановлюю webhook на: ${url}`);
     
     await bot.api.setWebhook(url);

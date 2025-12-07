@@ -12,7 +12,6 @@ import { addFromSaved } from "./conversations/addFromSaved.js";
 import addProduct from "./conversations/addProduct.js";
 import watch from "./middlewares/watcher.js";
 
-// middlewares
 bot.use(
 	session<SessionData, MyContext>({
 		initial: () => ({ 
@@ -34,24 +33,16 @@ bot.use(conversations());
 bot.use(createConversation(addProtein));
 bot.use(createConversation(addProduct));
 bot.use(createConversation(addFromSaved));
+bot.use(watch);
 
-// state machine
-bot.use(watch)
-
-// handlers
 crudHandler(bot);
 fromSaved(bot);
-
-// commands
 startCommand(bot);
 
 bot.catch((err) => console.error(err));
 
-// Експортуємо налаштований бот
 export default bot;
 
-// Для локальної розробки - запускаємо polling
-// Якщо WEBHOOK_URL не встановлено, запускаємо polling
 if (!process.env.WEBHOOK_URL) {
 	bot.start();
 }
