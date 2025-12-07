@@ -43,6 +43,6 @@ bot.catch((err) => console.error(err));
 
 export default bot;
 
-if (!process.env.WEBHOOK_URL) {
+if (!process.env.WEBHOOK_URL && process.env.NODE_ENV !== "production") {
 	bot.start();
 }
