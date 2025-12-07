@@ -17,81 +17,7 @@ bot.use(
 	session<SessionData, MyContext>({
 		initial: () => ({ 
 			proteinToday: 0,
-			products: [
-				{
-					name: 'string',
-					type: 'gram',
-					value: 24,
-					amountToday: 24
-				},
-				{
-					name: 'gaaga',
-					type: 'gram',
-					value: 24,
-					amountToday: 24
-				},
-				{
-					name: 'qtqtqt',
-					type: 'gram',
-					value: 24,
-					amountToday: 24
-				},
-				{
-					name: 'etetete',
-					type: 'gram',
-					value: 24,
-					amountToday: 24
-				},
-				{
-					name: 'wrrrwrwr',
-					type: 'gram',
-					value: 24,
-					amountToday: 24
-				},
-				{
-					name: 'sdfgdfgasg',
-					type: 'gram',
-					value: 24,
-					amountToday: 24
-				},
-				{
-					name: '111111',
-					type: 'gram',
-					value: 24,
-					amountToday: 24
-				},
-				{
-					name: 'svkkkvkkkk',
-					type: 'gram',
-					value: 24,
-					amountToday: 24
-				},
-				{
-					name: 'ppwpwppwpw',
-					type: 'gram',
-					value: 24,
-					amountToday: 24
-				},
-				{
-					name: 'r;r;r;r;',
-					type: 'gram',
-					value: 24,
-					amountToday: 24
-				},
-				{
-					name: 'ammmsdmmd',
-					type: 'gram',
-					value: 24,
-					amountToday: 24
-				},
-				{
-					name: 'qdkfnsdjfk',
-					type: 'gram',
-					value: 24,
-					amountToday: 24
-				},
-
-			],
+			products: [],
 			currentProductIndex: 0,
 			states: ['INIT'],
 			log: {}
@@ -120,4 +46,12 @@ fromSaved(bot);
 startCommand(bot);
 
 bot.catch((err) => console.error(err));
-bot.start()
+
+// Експортуємо налаштований бот
+export default bot;
+
+// Для локальної розробки - запускаємо polling
+// Якщо WEBHOOK_URL не встановлено, запускаємо polling
+if (!process.env.WEBHOOK_URL) {
+	bot.start();
+}
