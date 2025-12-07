@@ -3,6 +3,9 @@
     "api/*.ts": {
       "runtime": "@vercel/node@3.0.7"
     }
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
 
