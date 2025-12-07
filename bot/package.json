@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "engines": {
-    "node": "20.x"
+    "node": "18.x"
   },
   "scripts": {
     "dev": "tsx watch ./index.ts",
@@ -17,7 +17,7 @@
   "dependencies": {
     "@grammyjs/conversations": "^2.1.0",
     "@grammyjs/menu": "^1.3.1",
-    "@vercel/node": "^3.0.7",
+    "@vercel/node": "^5.5.15",
     "axios": "^1.12.2",
     "dotenv": "^17.2.1",
     "grammy": "^1.38.1"
