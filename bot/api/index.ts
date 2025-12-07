@@ -14,9 +14,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: "No update data" });
     }
 
-    console.log("Processing update:", update.update_id);
-    await bot.handleUpdate(update);
-    console.log("Update processed successfully");
+    console.log("Processing update:", update.update_id, "type:", update.message?.text || update.callback_query?.data || "unknown");
+    
+    try {
+      await bot.handleUpdate(update);
+      console.log("Update processed successfully");
+    } catch (botError) {
+      console.error("Bot error:", botError);
+      throw botError;
+    }
     
     return res.status(200).json({ ok: true });
   } catch (error) {

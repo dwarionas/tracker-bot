@@ -5,9 +5,16 @@ import regUser from "../api/reg.js";
 
 export function startCommand(bot: Bot<MyContext>) {
     bot.command('start', async (ctx) => {
-        // regUser(ctx.from!)
-        ctx.session.states = ['INIT'];
-        await ctx.reply('Вітаю в боті', { reply_markup: staticKeyboards.INIT as Keyboard });
+        try {
+            console.log("Start command received from user:", ctx.from?.id);
+            // regUser(ctx.from!)
+            ctx.session.states = ['INIT'];
+            await ctx.reply('Вітаю в боті', { reply_markup: staticKeyboards.INIT as Keyboard });
+            console.log("Start command processed successfully");
+        } catch (error) {
+            console.error("Error in start command:", error);
+            throw error;
+        }
     });
 
     bot.hears('Статистика', async ctx => {
