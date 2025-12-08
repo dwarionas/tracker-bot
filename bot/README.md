@@ -1,189 +1,46 @@
-# Telegram Bot - Protein Tracker
+# Protein Tracker Telegram Bot
 
-Telegram бот для відстеження споживання білка, написаний на TypeScript з використанням Grammy.
+Live bot: https://t.me/hyperbolidbot
 
-## 🚀 Деплой на Vercel
+## What it does
+- Add protein quickly (manual input)
+- Use saved products or add new ones (per item / per grams)
+- Pick from a popular products list
+- Track per-product daily totals and overall daily total
+- Simple reply-keyboard navigation
 
-### Передумови
-
-1. Обліковий запис на [Vercel](https://vercel.com)
-2. Telegram Bot Token (отримайте від [@BotFather](https://t.me/BotFather))
-3. Node.js 18+ (для локальної розробки)
-
-### Крок 1: Встановлення залежностей
-
+## Quick start (local)
 ```bash
 npm install
+npm run dev
 ```
 
-### Крок 2: Налаштування змінних оточення
-
-Створіть файл `.env` в корені проєкту:
-
-```env
-BOT_KEY=your_telegram_bot_token_here
+Env:
+```
+BOT_KEY=your_telegram_bot_token
+WEBHOOK_URL=https://your-vercel-app.vercel.app   # only for webhook setup script
 ```
 
-### Крок 3: Деплой на Vercel
-
-#### Варіант A: Через Vercel CLI
-
-1. Встановіть Vercel CLI:
-```bash
-npm i -g vercel
-```
-
-2. Увійдіть в Vercel:
-```bash
-vercel login
-```
-
-3. Деплой:
-```bash
-vercel
-```
-   Після деплою ви побачите URL вашого проєкту (наприклад: `https://your-project.vercel.app`)
-   **Збережіть цей URL - він знадобиться для webhook!**
-
-4. Додайте змінні оточення в Vercel Dashboard:
-   - Перейдіть на [vercel.com](https://vercel.com) → ваш проєкт
-   - Settings → Environment Variables
-   - Додайте `BOT_KEY` зі значенням вашого Telegram Bot Token
-   - **НЕ додавайте `WEBHOOK_URL` в Vercel** - вона потрібна тільки локально для скрипта
-
-#### Варіант B: Через GitHub Integration
-
-1. Завантажте проєкт на GitHub
-2. На [vercel.com](https://vercel.com) → Add New Project → Import ваш репозиторій
-3. Vercel автоматично визначить налаштування
-4. Після деплою скопіюйте URL проєкту (буде показано після деплою)
-5. Додайте змінні оточення в Vercel Dashboard:
-   - Settings → Environment Variables
-   - Додайте `BOT_KEY` зі значенням вашого Telegram Bot Token
-
-### Крок 4: Встановлення Webhook
-
-**⚠️ ВАЖЛИВО:** Команду `npm run set-webhook` потрібно запускати **ЛОКАЛЬНО** на вашому комп'ютері, **НЕ на Vercel**!
-
-#### Де взяти Webhook URL?
-
-1. Після деплою на Vercel ви отримаєте URL вашого проєкту
-2. URL буде виглядати так: `https://your-project-name.vercel.app`
-3. Цей URL ви побачите:
-   - В консолі після команди `vercel`
-   - В Vercel Dashboard → ваш проєкт → Settings → Domains
-   - В Vercel Dashboard → ваш проєкт → Deployments → останній деплой
-
-#### Як встановити Webhook (покроково):
-
-**Варіант 1: Через скрипт (рекомендовано)**
-
-1. На вашому комп'ютері (локально) відкрийте файл `.env`:
-```env
-BOT_KEY=your_telegram_bot_token_here
-WEBHOOK_URL=https://your-project-name.vercel.app
-```
-   Замініть `your-project-name.vercel.app` на реальний URL з Vercel
-   **Примітка:** Можна додавати зі слешем в кінці (`https://...vercel.app/`) або без - скрипт автоматично виправить
-
-2. В терміналі на вашому комп'ютері запустіть:
+## Deploy (Vercel)
+1) Set `BOT_KEY` in Vercel Project Settings → Environment Variables  
+2) Deploy (CLI or GitHub): `vercel --prod`  
+3) Set webhook locally (after deploy, with WEBHOOK_URL in .env):  
 ```bash
 npm run set-webhook
 ```
 
-3. Якщо все добре, ви побачите:
+## Endpoints
+- `/api` — Telegram webhook handler
+- `/api/test` — health check
+
+## Project structure
 ```
-✅ Webhook успішно встановлено!
+api/          # webhook + test endpoint
+commands/     # /start, etc.
+conversations/# multi-step flows
+handlers/     # state routing
+helpers/      # keyboards, messages
+middlewares/  # guards, navigation, pagination
+scripts/      # set-webhook
 ```
-
-**Варіант 2: Вручну через curl (альтернатива)**
-
-Якщо не хочете використовувати скрипт, можете встановити webhook вручну:
-
-```bash
-curl -X POST "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setWebhook?url=https://your-project-name.vercel.app/api"
-```
-
-Замініть:
-- `<YOUR_BOT_TOKEN>` на ваш реальний токен бота
-- `your-project-name.vercel.app` на ваш реальний URL з Vercel
-
-**Варіант 3: Через браузер**
-
-Просто відкрийте в браузері:
-```
-https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setWebhook?url=https://your-project-name.vercel.app/api
-```
-
-#### Перевірка webhook
-
-Щоб перевірити, чи правильно встановлено webhook:
-
-```bash
-curl "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getWebhookInfo"
-```
-
-Або відкрийте в браузері:
-```
-https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getWebhookInfo
-```
-
-Ви повинні побачити `"url": "https://your-project-name.vercel.app/api"` в відповіді.
-
-## 🛠 Локальна розробка
-
-Для локальної розробки бот використовує polling (автоматично, якщо `WEBHOOK_URL` не встановлено):
-
-```bash
-npm run dev
-```
-
-## 📁 Структура проєкту
-
-```
-bot/
-├── api/              # API routes для Vercel
-│   ├── index.ts      # Webhook handler
-│   └── reg.ts        # API інтеграція
-├── commands/         # Команди бота
-├── conversations/    # Багатокрокові діалоги
-├── handlers/         # Обробники подій
-├── helpers/          # Допоміжні функції
-├── middlewares/      # Middleware
-├── scripts/          # Утиліти
-├── types/            # TypeScript типи
-├── bot.ts           # Ініціалізація бота
-├── index.ts         # Точка входу та конфігурація
-└── vercel.json      # Vercel конфігурація
-```
-
-## 🔧 Змінні оточення
-
-- `BOT_KEY` - Telegram Bot Token (обов'язково)
-- `WEBHOOK_URL` - URL вашого Vercel проєкту (для production)
-- `NODE_ENV` - `production` для Vercel (встановлюється автоматично)
-
-## 📝 Примітки
-
-- Бот автоматично використовує polling для локальної розробки
-- Для production на Vercel використовується webhook
-- Сесії зберігаються в пам'яті (не персистентні між перезапусками)
-- Для production рекомендується використовувати зовнішнє сховище для сесій
-
-## 🐛 Troubleshooting
-
-### Бот не відповідає після деплою
-
-1. Перевірте, чи правильно встановлено `BOT_KEY` в Vercel
-2. Перевірте, чи встановлено webhook:
-   ```bash
-   curl "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getWebhookInfo"
-   ```
-3. Перевірте логи в Vercel Dashboard
-
-### Помилки при встановленні webhook
-
-- Переконайтеся, що `WEBHOOK_URL` вказує на правильний URL
-- Переконайтеся, що URL доступний з інтернету (не localhost)
-- Перевірте, чи правильно встановлено `BOT_KEY`
 
