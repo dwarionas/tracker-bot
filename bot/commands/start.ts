@@ -9,7 +9,7 @@ export function startCommand(bot: Bot<MyContext>) {
             console.log("Start command received from user:", ctx.from?.id);
             // regUser(ctx.from!)
             ctx.session.states = ['INIT'];
-            await ctx.reply('Вітаю в боті', { reply_markup: staticKeyboards.INIT as Keyboard });
+            await ctx.reply('Welcome! Choose an option:', { reply_markup: staticKeyboards.INIT as Keyboard });
             console.log("Start command processed successfully");
         } catch (error) {
             console.error("Error in start command:", error);
@@ -17,7 +17,7 @@ export function startCommand(bot: Bot<MyContext>) {
         }
     });
 
-    bot.hears('Статистика', async ctx => {
+    bot.hears('Statistics', async ctx => {
         // ctx.session.state = "stats";
         await ctx.reply('Protein today: ' + ctx.session.proteinToday);
     });

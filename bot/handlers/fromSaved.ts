@@ -21,9 +21,9 @@ console.log('1')
 
             if (product && !ctx.session.products.filter((el: { name: string; }) => el.name == product.name).length) {
                 ctx.session.products.push(product);
-                await ctx.answerCallbackQuery('Додано');
+                await ctx.answerCallbackQuery('Added');
             } else {
-                await ctx.answerCallbackQuery('Продукт вже доданий');
+                await ctx.answerCallbackQuery('Product already added');
             }
         }
     }));

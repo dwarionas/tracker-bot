@@ -6,39 +6,39 @@ type Fields = 'productTypes';
 
 export const keyboards: Record<Fields, Keyboard> = {
     productTypes: new Keyboard()
-        .text('Поштучно')
-        .text('В грамах')
+        .text('Per item')
+        .text('Per grams')
         .persistent()
         .resized()
 }
 
 export const staticKeyboards: Record<States, Keyboard> = {
   INIT: new Keyboard()
-    .text('Додати білок').row()
-	  .text('Налаштування')
+    .text('Add protein').row()
+	  .text('Settings')
     .persistent()
     .resized(),
 
   FROM_SAVED: new Keyboard()
-      .text('Додати продукт або страву').row()
-      .text('Вибрати з популярного').row()
-      .text('Назад')
+      .text('Add product or meal').row()
+      .text('Choose from popular').row()
+      .text('Back')
       .persistent()
       .resized(),
 
   ADD_PROTEIN: new Keyboard()
-  	.text("Вибрати зі збережених").row()
-  	.text('Назад').persistent().resized(),
+  	.text("Choose from saved").row()
+  	.text('Back').persistent().resized(),
 
   ADD_FROM_SAVED: new Keyboard()
-    .text('Видалити зі збережених').row()
-    .text('Назад').persistent().resized(),
+    .text('Remove from saved').row()
+    .text('Back').persistent().resized(),
 
-  ADD_PRODUCT: new Keyboard().text('Назад').persistent().resized(),
-  CHOOSE_PRODUCT: new Keyboard().text('Назад').persistent().resized(),
+  ADD_PRODUCT: new Keyboard().text('Back').persistent().resized(),
+  CHOOSE_PRODUCT: new Keyboard().text('Back').persistent().resized(),
 
-  STATS: new Keyboard().text('test button').persistent().resized(),
-  SYNC: new Keyboard().text('test button').persistent().resized(),
+  STATS: new Keyboard().text('Test').persistent().resized(),
+  SYNC: new Keyboard().text('Test').persistent().resized(),
 };
 
 export function getKeyboard(data: SessionData) {

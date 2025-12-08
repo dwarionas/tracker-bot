@@ -8,7 +8,7 @@ export default function onlyState<T extends MyContext>(allowedStates: States[]) 
         if (allowedStates.includes(currentState)) {
             return next();
         } else {
-            return ctx.reply("Дія недоступна");
+            return ctx.reply("Action is not available");
         }
     };
 }

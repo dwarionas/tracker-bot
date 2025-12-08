@@ -13,16 +13,16 @@ export async function addProtein(conversation: Conversation, ctx: Context) {
     const { match } = await conversation.waitForHears(/^\d+$/, { otherwise: async (ctx: MyContext) => {
         const text = ctx.message?.text;
 
-        if (text === 'Вибрати зі збережених') {
+        if (text === 'Choose from saved') {
             const sess = await conversation.external((ctx: SessionContext) => {
                 ctx.session.states.push('FROM_SAVED');
                 return ctx.session;
             });
  
-            const msg = sess.products.length > 0 ? 'Натисніть на продукт щоб додати білок' : 'Немає збережених продуктів';
+            const msg = sess.products.length > 0 ? 'Tap a product to add protein' : 'No saved products';
             const hasProducts = sess.products.length > 0;
 
-            hasProducts && await ctx.reply('Збережені продукти', { reply_markup: renderKeyboard(0, sess.products) });
+            hasProducts && await ctx.reply('Saved products', { reply_markup: renderKeyboard(0, sess.products) });
             await ctx.reply(msg, { reply_markup: getKeyboard(sess) });
             await conversation.halt();
             return;
@@ -39,7 +39,7 @@ export async function addProtein(conversation: Conversation, ctx: Context) {
 
     // коментар до їжі
 
-    await ctx.reply(`Прийнято: ${match} г білка ✅. Білка за сьогодні ${total}`);
-    await ctx.reply(`Введіть кількість протеїну:`);
+    await ctx.reply(`Logged: ${match}g protein ✅. Total today: ${total}`);
+    await ctx.reply(`Enter protein amount:`);
     return await conversation.rewind(checkpoint);
 }

@@ -15,7 +15,7 @@ export async function addFromSaved(conversation: Conversation, ctx: Context) {
     const { match } = await conversation.waitForHears(/^\d+$/, { otherwise: async (ctx: MyContext) => {
         const text = ctx.message?.text;
 
-        if (text === 'Видалити зі збережених') {
+        if (text === 'Remove from saved') {
             const sess = await conversation.external((ctx: SessionContext) => {
                 ctx.session.products = ctx.session.products.filter((el, i) => i !== productIndex);
                 return ctx.session;
@@ -23,11 +23,11 @@ export async function addFromSaved(conversation: Conversation, ctx: Context) {
 
             await conversation.external((ctx: SessionContext) => ctx.session.states.pop());
 
-            const msg = sess.products.length > 0 ? 'Натисніть на продукт щоб додати білок' : 'Немає збережених продуктів';
+            const msg = sess.products.length > 0 ? 'Tap a product to add protein' : 'No saved products';
             const hasProducts = sess.products.length > 0;
 
-            await ctx.reply('Видалено', { reply_markup: getKeyboard(sess) });
-            hasProducts && await ctx.reply('Збережені продукти', { reply_markup: renderKeyboard(0, sess.products) });
+            await ctx.reply('Removed', { reply_markup: getKeyboard(sess) });
+            hasProducts && await ctx.reply('Saved products', { reply_markup: renderKeyboard(0, sess.products) });
 
             await conversation.halt();
             return;
@@ -47,7 +47,7 @@ export async function addFromSaved(conversation: Conversation, ctx: Context) {
 
     // коментар до їжі
 
-    await ctx.reply(`Прийнято: ${match}г білка для продукту ${product?.name}. Білка за сьогодні ${totalForProductToday}`);
-    await ctx.reply(`Введіть к-сть протеїну для ${product?.name}`);
+    await ctx.reply(`Logged: ${match}g protein for ${product?.name}. Total today for this product: ${totalForProductToday}`);
+    await ctx.reply(`Enter protein amount for ${product?.name}`);
     return await conversation.rewind(checkpoint);
 }

@@ -16,7 +16,7 @@ export function navigate<T extends MyContext>(to: States) {
         const currentState = states.at(-1)!;
 
         if (currentState !== 'INIT' && currentState === to) {
-            return ctx.reply("Ви вже в цьому стані");
+            return ctx.reply("You are already in this state");
         }
 
         states.push(to);
@@ -43,7 +43,7 @@ export function exitConv<T extends MyContext>(conversation: Conversation) {
   return async (ctx: T) => {
     const text = ctx.message?.text;
 
-    if (text === 'Назад' || text === '/start') {
+    if (text === 'Back' || text === '/start') {
       const sess = await conversation.external((ctx: SessionContext) => applyBack(ctx.session));
 
       await ctx.reply(messages[sess.states.at(-1)!], { reply_markup: getKeyboard(sess) });

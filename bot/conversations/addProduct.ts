@@ -8,29 +8,29 @@ export default async function addProduct(conversation: Conversation, ctx: Contex
     const session = await conversation.external((ctx: MyContext) => ctx.session);
 
     const { message: name } = await conversation.waitFor('message:text');
-    if (name.text == 'Назад') {
+    if (name.text == 'Back') {
         await conversation.external((ctx: SessionContext) => ctx.session.states.pop());
         const sess = await conversation.external((ctx: SessionContext) => ctx.session);
-        return await ctx.reply('Виберіть опцію', { reply_markup: getKeyboard(sess) });
+        return await ctx.reply('Choose an option', { reply_markup: getKeyboard(sess) });
     }
 
-    await ctx.reply('Виберіть тип продукту', { reply_markup: keyboards.productTypes });
-    const { match: type } = await conversation.waitForHears(['Поштучно', 'В грамах'], { 
-        otherwise: (ctx) => ctx.reply('Виберіть один з наведених варіантів')
+    await ctx.reply('Choose product type', { reply_markup: keyboards.productTypes });
+    const { match: type } = await conversation.waitForHears(['Per item', 'Per grams'], { 
+        otherwise: (ctx) => ctx.reply('Please choose one of the options')
     });
 
-    await ctx.reply('Введіть кількість білку на ', { reply_markup: getKeyboard(session) });
+    await ctx.reply('Enter protein amount', { reply_markup: getKeyboard(session) });
     const { match: count } = await conversation.waitForHears(/^\d+$/, { otherwise: exitConv(conversation)});
 
     await conversation.external((ctx: SessionContext) => {
         ctx.session.products.push({
             name: name.text,
-            type: type === 'Поштучно' ? 'stuck' : 'gram',
+            type: type === 'Per item' ? 'stuck' : 'gram',
             value: +count,
             amountToday: 0
         });
     });
 
-    await ctx.reply(`Продукт "${name.text}" збережено ✅`, { reply_markup: getKeyboard(session) });
+    await ctx.reply(`Saved product "${name.text}" ✅`, { reply_markup: getKeyboard(session) });
     await conversation.halt();
 }
